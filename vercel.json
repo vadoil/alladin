@@ -1,7 +1,7 @@
 {
-  "functions": {
-    "api/*.js": {
-      "runtime": "nodejs20.x"
-    }
-  }
+  "rewrites": [
+    { "source": "/analyze", "destination": "/api/analyze" },
+    { "source": "/analyze/batch", "destination": "/api/analyze-batch" },
+    { "source": "/health", "destination": "/api/health" }
+  ]
 }
