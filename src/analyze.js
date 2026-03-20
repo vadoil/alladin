@@ -1,14 +1,14 @@
-import Anthropic from "@anthropic-ai/sdk";
 import { z } from "zod";
 import { cacheGet, cacheSet } from "./cache.js";
 
 // ─── Config ──────────────────────────────────────────────────────────────────
 
-const MODEL = process.env.ANTHROPIC_MODEL || "claude-sonnet-4-20250514";
-const MAX_TOKENS = Number(process.env.ANTHROPIC_MAX_TOKENS || 1024);
-const REQUEST_TIMEOUT_MS = Number(process.env.ANTHROPIC_TIMEOUT_MS || 15000);
-const RETRIES = Number(process.env.ANTHROPIC_RETRIES || 2);
-const RETRY_BASE_MS = Number(process.env.ANTHROPIC_RETRY_BASE_MS || 500);
+const MODEL = process.env.OPENAI_MODEL || "gpt-4.1-mini";
+const MAX_TOKENS = Number(process.env.OPENAI_MAX_TOKENS || 1024);
+const REQUEST_TIMEOUT_MS = Number(process.env.OPENAI_TIMEOUT_MS || 15000);
+const RETRIES = Number(process.env.OPENAI_RETRIES || 2);
+const RETRY_BASE_MS = Number(process.env.OPENAI_RETRY_BASE_MS || 500);
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
 // ─── System prompt ───────────────────────────────────────────────────────────
 
@@ -246,38 +246,47 @@ function extractJson(raw) {
   }
 }
 
-async function runWithTimeout(promiseFactory, timeoutMs) {
-  return Promise.race([
-    promiseFactory(),
-    new Promise((_, reject) =>
-      setTimeout(() => reject(new Error(`anthropic_timeout_${timeoutMs}ms`)), timeoutMs)
-    ),
-  ]);
-}
-
-async function callAnthropicWithRetry({ client, normalized, retrieved }) {
+async function callOpenAIWithRetry({ normalized, retrieved }) {
   let lastErr;
 
   for (let attempt = 0; attempt <= RETRIES; attempt += 1) {
-    try {
-      const response = await runWithTimeout(
-        () =>
-          client.messages.create({
-            model: MODEL,
-            max_tokens: MAX_TOKENS,
-            system: SYSTEM_PROMPT(retrieved),
-            messages: [{ role: "user", content: `Ниша: "${normalized}"` }],
-          }),
-        REQUEST_TIMEOUT_MS
-      );
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
 
-      return response;
+    try {
+      const res = await fetch("https://api.openai.com/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${OPENAI_API_KEY}`,
+        },
+        body: JSON.stringify({
+          model: MODEL,
+          max_tokens: MAX_TOKENS,
+          response_format: { type: "json_object" },
+          messages: [
+            { role: "system", content: SYSTEM_PROMPT(retrieved) },
+            { role: "user", content: `Ниша: "${normalized}"` },
+          ],
+        }),
+        signal: controller.signal,
+      });
+
+      if (!res.ok) {
+        const errText = await res.text();
+        throw new Error(`openai_http_${res.status}: ${errText}`);
+      }
+
+      const json = await res.json();
+      return json?.choices?.[0]?.message?.content?.trim() || "";
     } catch (err) {
       lastErr = err;
       if (attempt < RETRIES) {
         const delay = RETRY_BASE_MS * 2 ** attempt;
         await sleep(delay);
       }
+    } finally {
+      clearTimeout(timer);
     }
   }
 
@@ -299,11 +308,13 @@ export async function analyzeNiche(rawNiche) {
   }
 
   const retrieved = findSimilarNiche(normalized);
-  const client = new Anthropic();
+
+  if (!OPENAI_API_KEY) {
+    return { ok: false, error: "missing_openai_api_key" };
+  }
 
   try {
-    const response = await callAnthropicWithRetry({ client, normalized, retrieved });
-    const text = response?.content?.[0]?.text?.trim();
+    const text = await callOpenAIWithRetry({ normalized, retrieved });
 
     if (!text) {
       return { ok: false, error: "empty_model_response" };
@@ -318,7 +329,7 @@ export async function analyzeNiche(rawNiche) {
       ok: true,
       data: validated,
       cached: false,
-      source: "anthropic",
+      source: "openai",
       used_reference_profile: Boolean(retrieved),
     };
   } catch (err) {
