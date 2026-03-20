@@ -1,8 +1,14 @@
 {
-  "routes": [
-    { "src": "^/$", "dest": "/index.html" },
-    { "src": "^/analyze$", "dest": "/api/analyze" },
-    { "src": "^/analyze/batch$", "dest": "/api/analyze-batch" },
-    { "src": "^/health$", "dest": "/api/health" }
+  "rewrites": [
+    { "source": "/dashboard", "destination": "/dashboard.html" },
+    { "source": "/", "destination": "/index.html" }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-store" }
+      ]
+    }
   ]
 }
