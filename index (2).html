@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alladin — сайт, реклама, CRM за 60 секунд</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600&family=Unbounded:wght@300;400;600;700&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;overflow-x:hidden}
+:root{
+  --bg:#F4F1EB;--bg2:#EDE9E0;--bg3:#E5E0D4;
+  --ink:#1C1917;--ink2:#44403C;--ink3:#78716C;
+  --line:rgba(28,25,23,.1);--line2:rgba(28,25,23,.06);
+  --acc:#C2501F;--acc2:#E07040;
+  --green:#2D6A4F;--blue:#1D4E89;--gold:#B5860D;
+  --sans:'Plus Jakarta Sans',sans-serif;
+  --serif:'Unbounded',sans-serif;
+  --mono:'DM Mono',monospace;
+}
+body{font-family:var(--sans);background:var(--bg);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased;cursor:none;overflow-x:hidden}
+::selection{background:var(--acc);color:#fff}
+#cur{position:fixed;width:8px;height:8px;background:var(--acc);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .2s,height .2s}
+#cur-o{position:fixed;width:32px;height:32px;border:1px solid rgba(194,80,31,.3);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:left .13s ease,top .13s ease,width .25s,height .25s}
+nav{position:sticky;top:0;z-index:200;background:rgba(244,241,235,.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);padding:0 56px;height:60px;display:flex;align-items:center;justify-content:space-between}
+.logo{font-family:var(--serif);font-size:16px;font-weight:700;font-style:normal;color:var(--ink);text-decoration:none;letter-spacing:-.02em}
+.logo sup{font-family:var(--mono);font-size:7px;font-style:normal;color:var(--acc);vertical-align:super;letter-spacing:.1em}
+.nav-r{display:flex;align-items:center;gap:32px}
+.nav-r a{font-size:12px;letter-spacing:.06em;color:var(--ink3);text-decoration:none;transition:color .2s}
+.nav-r a:hover{color:var(--ink)}
+.nav-pill{background:var(--ink)!important;color:var(--bg)!important;padding:8px 20px;border-radius:100px;font-size:12px!important;font-weight:500!important;transition:background .2s!important}
+.nav-pill:hover{background:var(--acc)!important}
+.hero{height:calc(100vh - 60px);min-height:620px;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr;border-bottom:1px solid var(--line)}
+.hero-l{padding:80px 56px;display:flex;flex-direction:column;justify-content:space-between;border-right:1px solid var(--line)}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:40px}
+.hero-badge::before{content:'';width:20px;height:1px;background:var(--acc)}
+.hero-h{font-family:var(--serif);font-size:clamp(36px,4vw,60px);font-weight:700;line-height:1.05;letter-spacing:-.04em;margin-bottom:32px}
+.hero-h em{font-style:normal;color:var(--acc)}
+.hero-sub{font-size:16px;color:var(--ink2);font-weight:300;line-height:1.75;max-width:440px;margin-bottom:48px}
+.hero-iw{background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:20px}
+.hero-il{font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px}
+.hero-row{display:flex;gap:8px}
+.hero-row input{flex:1;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:12px 16px;font-family:var(--sans);font-size:14px;color:var(--ink);outline:none;transition:border-color .2s}
+.hero-row input:focus{border-color:var(--acc);background:#fff}
+.hero-row input::placeholder{color:var(--ink3)}
+.hero-go{background:var(--acc);color:#fff;border:none;border-radius:8px;padding:12px 22px;font-family:var(--sans);font-size:13px;font-weight:600;cursor:none;white-space:nowrap;transition:background .2s}
+.hero-go:hover{background:var(--acc2)}
+.hero-hint{margin-top:10px;font-family:var(--mono);font-size:10px;color:var(--ink3);letter-spacing:.06em}
+.hero-r{display:flex;flex-direction:column;overflow:hidden;align-self:stretch}
+.pillar{flex:1;padding:36px 44px;border-bottom:1px solid var(--line);display:flex;flex-direction:column;justify-content:space-between;gap:18px;transition:background .25s}
+.pillar:last-child{border-bottom:none}
+.pillar:hover{background:var(--bg2)}
+.pillar-top{display:flex;align-items:flex-start;justify-content:space-between}
+.pillar-icon{width:38px;height:38px;border-radius:8px;display:flex;align-items:center;justify-content:center}
+.pillar-icon svg{width:18px;height:18px}
+.pillar-num{font-family:var(--mono);font-size:11px;color:var(--ink3)}
+.pillar-title{font-family:var(--serif);font-size:17px;font-weight:600;font-style:normal;line-height:1.25}
+.pillar-desc{font-size:13px;color:var(--ink3);line-height:1.65;font-weight:300}
+.pillar-tag{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border-radius:100px;background:var(--bg3);color:var(--ink3)}
+.pillar-tag::before{content:'';width:5px;height:5px;border-radius:50%;background:currentColor}
+.p1 .pillar-icon{background:rgba(194,80,31,.08)} .p1 .pillar-tag::before,.p1 .pillar-tag{color:var(--acc);background:rgba(194,80,31,.08)}
+.p2 .pillar-icon{background:rgba(45,106,79,.08)}  .p2 .pillar-tag::before,.p2 .pillar-tag{color:var(--green);background:rgba(45,106,79,.08)}
+.p3 .pillar-icon{background:rgba(29,78,137,.08)}   .p3 .pillar-tag::before,.p3 .pillar-tag{color:var(--blue);background:rgba(29,78,137,.08)}
+.strip{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid var(--line)}
+.strip-item{padding:32px 40px;border-right:1px solid var(--line)}
+.strip-item:last-child{border-right:none}
+.strip-n{font-family:var(--serif);font-size:36px;font-weight:700;font-style:normal;line-height:1;margin-bottom:4px}
+.strip-l{font-size:12px;color:var(--ink3);font-weight:300;line-height:1.4}
+section{padding:100px 56px}
+.s-mark{display:flex;align-items:center;gap:16px;margin-bottom:56px}
+.s-mark-n{font-family:var(--mono);font-size:10px;color:var(--ink3)}
+.s-mark-l{flex:1;height:1px;background:var(--line)}
+.s-mark-t{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3)}
+.s-title{font-family:var(--serif);font-size:clamp(28px,3.2vw,50px);font-weight:700;line-height:1.08;letter-spacing:-.04em;margin-bottom:56px;max-width:600px}
+.s-title em{font-style:normal;color:var(--acc)}
+.build-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-bottom:64px}
+.build-l{background:var(--bg);padding:32px 36px;display:flex;flex-direction:column;gap:0}
+.build-r{background:var(--bg2);padding:20px;position:relative;min-height:420px}
+.build-r canvas{width:100%;height:100%;border-radius:8px;background:var(--bg)}
+.build-status{position:absolute;bottom:16px;left:16px;font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--ink3);display:flex;align-items:center;gap:6px}
+.build-status::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--acc);animation:blink 1.4s ease infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+.step-row{display:flex;gap:16px;padding:18px 0;border-bottom:1px solid var(--line2);align-items:flex-start}
+.step-row:last-child{border-bottom:none;padding-bottom:0}
+.step-n{font-family:var(--mono);font-size:11px;color:rgba(28,25,23,.18);min-width:28px;padding-top:2px}
+.step-body h4{font-size:14px;font-weight:500;margin-bottom:4px}
+.step-body p{font-size:13px;color:var(--ink3);font-weight:300;line-height:1.6}
+.three{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.three-item{background:var(--bg);padding:40px 32px;transition:background .25s}
+.three-item:hover{background:var(--bg2)}
+.three-ic{width:42px;height:42px;border-radius:10px;margin-bottom:22px;display:flex;align-items:center;justify-content:center}
+.three-ic svg{width:20px;height:20px}
+.three-title{font-family:var(--serif);font-size:15px;font-weight:600;font-style:normal;margin-bottom:10px}
+.three-text{font-size:13px;color:var(--ink3);line-height:1.7;font-weight:300}
+.ic-acc{background:rgba(194,80,31,.08)} .ic-grn{background:rgba(45,106,79,.08)} .ic-blu{background:rgba(29,78,137,.08)} .ic-gld{background:rgba(181,134,13,.08)}
+.crm-layout{display:grid;grid-template-columns:1fr 1.45fr;gap:60px;align-items:start}
+.crm-text h3{font-family:var(--serif);font-size:clamp(24px,3vw,42px);font-weight:700;line-height:1.1;letter-spacing:-.04em;margin-bottom:18px}
+.crm-text h3 em{font-style:italic;color:var(--acc)}
+.crm-text p{font-size:15px;color:var(--ink2);font-weight:300;line-height:1.75;margin-bottom:28px}
+.crm-feats{display:flex;flex-direction:column;gap:14px}
+.crm-feat{display:flex;gap:14px;align-items:flex-start}
+.crm-dot{width:6px;height:6px;border-radius:50%;background:var(--acc);flex-shrink:0;margin-top:6px}
+.crm-feat-t{font-size:13px;color:var(--ink2);font-weight:300;line-height:1.6}
+.crm-feat-t strong{font-weight:500;color:var(--ink)}
+.crm-dash{background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:0 2px 24px rgba(28,25,23,.06)}
+.crm-bar{background:var(--ink);padding:13px 18px;display:flex;align-items:center;gap:8px}
+.crm-dot2{width:8px;height:8px;border-radius:50%}
+.crm-bar-t{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-left:auto}
+.crm-sts{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border-bottom:1px solid var(--line)}
+.crm-st{background:#fff;padding:16px 18px}
+.crm-st-n{font-family:var(--serif);font-size:22px;font-weight:700;font-style:normal;line-height:1;margin-bottom:2px}
+.crm-st-l{font-size:11px;color:var(--ink3);font-weight:300}
+.crm-leads{padding:14px 18px;display:flex;flex-direction:column;gap:8px}
+.lead{display:flex;align-items:center;gap:11px;padding:10px 12px;background:var(--bg);border-radius:8px}
+.lead-av{width:28px;height:28px;border-radius:50%;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;color:var(--ink2);flex-shrink:0}
+.lead-n{font-size:13px;font-weight:500;flex:1}
+.lead-src{font-family:var(--mono);font-size:9px;letter-spacing:.06em;color:var(--ink3);text-transform:uppercase}
+.badge{font-size:11px;font-weight:500;padding:3px 9px;border-radius:100px}
+.b-new{background:rgba(45,106,79,.1);color:var(--green)}
+.b-in{background:rgba(181,134,13,.1);color:var(--gold)}
+.b-won{background:rgba(194,80,31,.1);color:var(--acc)}
+.crm-ads{border-top:1px solid var(--line);padding:14px 18px}
+.ads-l{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px}
+.ads-chips{display:flex;gap:8px;flex-wrap:wrap}
+.ac{font-size:11px;padding:4px 12px;border-radius:100px;border:1px solid var(--line);color:var(--ink2);font-weight:300;display:flex;align-items:center;gap:5px}
+.ac::before{content:'';width:5px;height:5px;border-radius:50%;background:currentColor}
+.ac-ya{color:var(--acc)} .ac-vk{color:var(--blue)} .ac-tg{color:#0088cc}
+.ex-section{padding:0 0 100px}
+.ex-hdr{padding:0 56px 44px;display:flex;justify-content:space-between;align-items:flex-end}
+.ex-hdr h2{font-family:var(--serif);font-size:clamp(26px,3.2vw,46px);font-weight:700;font-style:normal;line-height:1.05}
+.ex-hint{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);display:flex;align-items:center;gap:8px}
+.ex-hint span{animation:nudge 2s ease-in-out infinite}
+@keyframes nudge{0%,100%{transform:translateX(0)}50%{transform:translateX(5px)}}
+.ex-track{display:flex;gap:16px;padding:0 56px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;cursor:grab;user-select:none}
+.ex-track::-webkit-scrollbar{display:none}
+.ex-track:active{cursor:grabbing}
+.ex-card{flex:0 0 320px;scroll-snap-align:start;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--bg);transition:border-color .25s,transform .25s}
+.ex-card:hover{border-color:rgba(194,80,31,.3);transform:translateY(-3px)}
+.ex-prev{height:240px;position:relative;overflow:hidden}
+.ms-wrap{width:200%;height:200%;transform:scale(.5);transform-origin:top left;pointer-events:none;overflow:hidden}
+.ex-lbl{position:absolute;top:11px;right:11px;background:rgba(244,241,235,.92);backdrop-filter:blur(6px);border:1px solid var(--line);border-radius:100px;font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;padding:3px 10px;color:var(--ink3)}
+.ex-body{padding:16px 18px 20px;border-top:1px solid var(--line)}
+.ex-ntag{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--acc);margin-bottom:5px}
+.ex-hl{font-size:13px;font-weight:400;line-height:1.4;margin-bottom:8px}
+.ex-meta{display:flex;gap:5px;flex-wrap:wrap}
+.ex-chip{font-family:var(--mono);font-size:9px;background:var(--bg2);padding:3px 8px;border-radius:4px;color:var(--ink3)}
+.ms{font-family:'Plus Jakarta Sans',sans-serif}
+.ms-nav{height:38px;display:flex;align-items:center;padding:0 16px}
+.ms-lr{width:48px;height:6px;border-radius:2px}
+.ms-hero{padding:26px 16px 22px}
+.ms-h{font-size:18px;font-weight:700;line-height:1.2;margin-bottom:5px}
+.ms-s{font-size:10px;font-weight:300;margin-bottom:12px;opacity:.55}
+.ms-btn{display:inline-block;font-size:9px;font-weight:600;padding:5px 12px;border-radius:100px}
+.ms-sec{padding:16px 16px 12px;border-top:1px solid rgba(0,0,0,.07)}
+.ms-t{font-size:8px;text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;opacity:.45}
+.ms-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px}
+.ms-item{border-radius:4px;padding:8px;font-size:9px;opacity:.85}
+.ms-item b{display:block;font-size:10px;margin-bottom:2px}
+.ms-ft{padding:10px 16px}
+.ms-ft-t{font-size:8px;opacity:.3}
+.cta-s{background:var(--ink);color:var(--bg);padding:100px 56px;position:relative;overflow:hidden}
+.cta-s::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(90deg,rgba(244,241,235,.018) 0,rgba(244,241,235,.018) 1px,transparent 1px,transparent 72px);pointer-events:none}
+.cta-inner{position:relative;z-index:1;max-width:700px}
+.cta-h{font-family:var(--serif);font-size:clamp(30px,4.5vw,68px);font-weight:700;line-height:1.04;letter-spacing:-.04em;margin-bottom:26px}
+.cta-h em{font-style:normal;color:var(--acc2)}
+.cta-p{font-size:16px;color:rgba(244,241,235,.45);font-weight:300;line-height:1.75;max-width:460px;margin-bottom:44px}
+.cta-field{display:flex;background:rgba(244,241,235,.06);border:1px solid rgba(244,241,235,.15);border-radius:10px;overflow:hidden;max-width:520px}
+.cta-field input{flex:1;background:none;border:none;padding:16px 20px;font-family:var(--sans);font-size:15px;color:var(--bg);outline:none}
+.cta-field input::placeholder{color:rgba(244,241,235,.22)}
+.cta-field button{background:var(--acc);color:#fff;border:none;padding:16px 28px;font-family:var(--sans);font-size:13px;font-weight:600;cursor:none;transition:background .2s;white-space:nowrap}
+.cta-field button:hover{background:var(--acc2)}
+.cta-note{margin-top:14px;font-family:var(--mono);font-size:10px;color:rgba(244,241,235,.22);letter-spacing:.08em}
+.cta-pills{display:flex;gap:10px;flex-wrap:wrap;margin-top:36px}
+.cta-pill{border:1px solid rgba(244,241,235,.1);border-radius:100px;padding:7px 16px;font-size:12px;color:rgba(244,241,235,.4);font-weight:300;display:flex;align-items:center;gap:6px}
+.cta-pill::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--acc2)}
+#drawer{position:fixed;right:0;top:0;bottom:0;width:min(520px,100vw);background:#fff;border-left:1px solid var(--line);z-index:500;transform:translateX(100%);transition:transform .5s cubic-bezier(.16,1,.3,1);overflow-y:auto;display:flex;flex-direction:column}
+#drawer.open{transform:none}
+.dh{padding:22px 26px 18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:#fff;z-index:2}
+.dh-t{font-family:var(--serif);font-size:14px;font-weight:600;font-style:normal;color:var(--ink)}
+.dh-x{background:none;border:1px solid var(--line);border-radius:6px;width:30px;height:30px;display:flex;align-items:center;justify-content:center;cursor:none;font-size:16px;color:var(--ink3);transition:border-color .2s}
+.dh-x:hover{border-color:var(--acc)}
+.d-load{display:none;padding:60px 28px;text-align:center}
+.d-load.on{display:block}
+.d-sp{width:26px;height:26px;border:2px solid var(--line);border-top-color:var(--acc);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 16px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.d-lt{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3)}
+.d-body{display:none;flex-direction:column}
+.d-body.on{display:flex}
+.d-tabs{display:flex;border-bottom:1px solid var(--line);padding:0 26px}
+.d-tab{padding:13px 14px;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;background:none;border:none;border-bottom:2px solid transparent;cursor:none;color:var(--ink3);transition:all .2s;margin-bottom:-1px}
+.d-tab.on{color:var(--acc);border-bottom-color:var(--acc)}
+.d-panel{padding:22px 26px;display:none}
+.d-panel.on{display:block}
+.d-um{font-family:var(--serif);font-size:20px;font-weight:700;font-style:normal;line-height:1.2;color:var(--ink);margin-bottom:10px}
+.d-ul{font-size:14px;color:var(--ink2);font-weight:300;line-height:1.7;margin-bottom:18px}
+.d-fg{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin-bottom:10px}
+.d-fl{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:7px}
+.d-fv{font-size:13px;color:var(--ink);line-height:1.55}
+.d-sec{border:1px solid var(--line);border-radius:8px;margin-bottom:8px;overflow:hidden}
+.d-sh{display:flex;gap:10px;align-items:center;padding:12px 14px;cursor:none;background:var(--bg);transition:background .2s}
+.d-sh:hover{background:var(--bg2)}
+.d-sid{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--acc);min-width:68px}
+.d-shl{font-size:13px;flex:1;color:var(--ink);line-height:1.3}
+.d-sb{display:none;padding:12px 14px;border-top:1px solid var(--line);font-size:12px;color:var(--ink2);line-height:1.7}
+.d-sec.open .d-sb{display:block}
+.d-buls{list-style:none;margin:6px 0}
+.d-buls li{padding:3px 0 3px 13px;position:relative;font-size:12px;color:var(--ink2)}
+.d-buls li::before{content:'—';position:absolute;left:0;color:var(--acc)}
+.d-cp{display:inline-block;margin-top:7px;background:rgba(194,80,31,.07);border:1px solid rgba(194,80,31,.18);color:var(--acc);padding:3px 10px;border-radius:100px;font-size:10px;font-family:var(--mono);letter-spacing:.06em}
+.d-pal{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+.d-sw{border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.d-swc{height:52px}
+.d-swb{padding:8px 10px}
+.d-swr{font-family:var(--mono);font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--acc);margin-bottom:2px}
+.d-swh{font-size:12px;color:var(--ink)}
+.d-sww{font-size:11px;color:var(--ink3)}
+.d-btns{padding:18px 26px 26px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:8px;position:sticky;bottom:0;background:#fff}
+.d-copy{background:var(--acc);color:#fff;border:none;border-radius:8px;padding:12px;font-family:var(--sans);font-size:13px;font-weight:600;cursor:none;transition:background .2s}
+.d-copy:hover{background:var(--acc2)}
+.d-dl{background:none;border:1px solid var(--line);border-radius:8px;padding:10px;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;cursor:none;color:var(--ink3);transition:all .2s}
+.d-dl:hover{border-color:var(--acc);color:var(--acc)}
+.d-err{padding:16px 26px;font-family:var(--mono);font-size:11px;color:var(--acc);display:none}
+.rv{opacity:0;transform:translateY(26px);transition:opacity .75s cubic-bezier(.16,1,.3,1),transform .75s cubic-bezier(.16,1,.3,1)}
+.rv.in{opacity:1;transform:none}
+.rv1{transition-delay:.08s}.rv2{transition-delay:.16s}.rv3{transition-delay:.24s}
+footer{padding:36px 56px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
+.flogo{font-family:var(--serif);font-size:14px;font-style:normal;font-weight:700;color:var(--ink)}
+.fnote{font-family:var(--mono);font-size:10px;color:var(--ink3);letter-spacing:.08em}
+.mht{padding:6px 14px 8px;font-family:ui-monospace,'Cascadia Code','Fira Code',monospace;font-size:10px;letter-spacing:.04em;border-radius:6px 6px 0 0;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:all .15s}
+.mht.on{background:#1A1A2E;color:#CDD6F4}
+.mht.off{background:rgba(255,255,255,.06);color:rgba(255,255,255,.3)}
+.mht.off:hover{background:rgba(255,255,255,.1);color:rgba(255,255,255,.5)}
+.mac-ln{font-family:ui-monospace,'Cascadia Code','Fira Code',monospace;font-size:11px;color:rgba(255,255,255,.18);line-height:18px;text-align:right;display:block}
+.mac-cur{display:inline-block;width:6px;height:13px;background:#CDD6F4;vertical-align:text-bottom;animation:mcurblink .9s step-end infinite}
+@keyframes mcurblink{0%,100%{opacity:1}50%{opacity:0}}
+@keyframes mbounce{0%,100%{transform:translateY(0);opacity:.35}50%{transform:translateY(-3px);opacity:1}}
+@media(max-width:900px){nav,footer{padding-left:24px;padding-right:24px} .hero{grid-template-columns:1fr;height:auto;min-height:0} .hero-r{display:flex;min-height:480px} .hero-l{padding:56px 24px} section,.cta-s{padding:72px 24px} .crm-layout,.build-grid{grid-template-columns:1fr} .strip{grid-template-columns:1fr 1fr} .strip-item:nth-child(n+3){border-top:1px solid var(--line)} .three{grid-template-columns:1fr} .build-r{min-height:280px} .ex-hdr,.ex-track{padding-left:24px;padding-right:24px}}
+</style>
+</head>
+<body>
+<div id="cur"></div><div id="cur-o"></div>
+<nav>
+  <a href="#" class="logo">Alladin<sup>AI</sup></a>
+  <div class="nav-r">
+    <a href="#how">Как работает</a>
+    <a href="#crm">CRM и реклама</a>
+    <a href="#examples">Примеры</a>
+    <a href="#cta" class="nav-pill">Попробовать →</a>
+  </div>
+</nav>
+<section class="hero" style="padding:0">
+  <div class="hero-l">
+    <div>
+      <div class="hero-badge rv">AI-платформа нового поколения</div>
+      <h1 class="hero-h rv rv1">Сайт.<br>Реклама.<br>CRM.<br><em>Всё за 60&nbsp;с</em></h1>
+      <p class="hero-sub rv rv2">Вводите нишу — AI строит сайт под аудиторию, запускает рекламу и ведёт заявки в CRM. <strong>Без дизайнера и маркетолога.</strong></p>
+      <div class="hero-iw rv rv3">
+        <div class="hero-il">Введите нишу вашего бизнеса</div>
+        <div class="hero-row">
+          <input type="text" id="h-inp" placeholder="Юрист, ремонт, психолог, кофейня…" onkeydown="if(event.key==='Enter')gen('h-inp')">
+          <button class="hero-go" onclick="gen('h-inp')">Создать →</button>
+        </div>
+        <div class="hero-hint">Бесплатно · без регистрации · результат за ~30 сек</div>
+      </div>
+    </div>
+  </div>
+  <!-- Mac code editor -->
+  <div class="hero-r" id="mac-editor-wrap" style="display:flex;flex-direction:column;overflow:hidden;background:#1A1A2E;min-height:0">
+    <div style="background:#1E1E1E;padding:11px 16px 0;display:flex;align-items:flex-start;gap:0;flex-shrink:0;min-height:38px">
+      <div style="display:flex;gap:6px;padding-top:2px;flex-shrink:0">
+        <div style="width:11px;height:11px;border-radius:50%;background:#FF5F56"></div>
+        <div style="width:11px;height:11px;border-radius:50%;background:#FFBD2E"></div>
+        <div style="width:11px;height:11px;border-radius:50%;background:#27C93F"></div>
+      </div>
+      <div style="display:flex;gap:1px;margin-left:12px;flex:1;overflow:hidden" id="mac-tabs-hero">
+        <div class="mht on" data-tab="0">analyze.js</div>
+        <div class="mht off" data-tab="1">site.html</div>
+        <div class="mht off" data-tab="2">ads.json</div>
+      </div>
+    </div>
+    <div style="background:#1A1A2E;flex:1;display:flex;flex-direction:column;overflow:hidden;min-height:0;height:100%">
+      <div style="background:#181825;border-bottom:1px solid rgba(255,255,255,.06);padding:5px 14px;display:flex;align-items:center;gap:8px;flex-shrink:0">
+        <span style="font-family:ui-monospace,'Cascadia Code','Fira Code',monospace;font-size:9px;color:rgba(255,255,255,.25);letter-spacing:.06em">alladin / src /</span>
+        <span style="font-family:ui-monospace,'Cascadia Code','Fira Code',monospace;font-size:9px;color:#CBA6F7;letter-spacing:.06em" id="mac-file-hero">analyze.js</span>
+      </div>
+      <div style="flex:1;padding:14px 16px;overflow:hidden;position:relative;display:flex;gap:0">
+        <div style="width:32px;flex-shrink:0;border-right:1px solid rgba(255,255,255,.05);padding-right:6px" id="mac-lns-hero"></div>
+        <div style="flex:1;padding-left:12px;font-family:ui-monospace,'Cascadia Code','Fira Code',monospace;font-size:11px;line-height:18px;color:#CDD6F4;white-space:pre;overflow:hidden" id="mac-code-hero"></div>
+      </div>
+      <div style="background:#181825;border-top:1px solid rgba(255,255,255,.06);padding:4px 14px;display:flex;justify-content:space-between;align-items:center;flex-shrink:0">
+        <div style="display:flex;gap:12px;align-items:center">
+          <span style="font-family:ui-monospace,'Cascadia Code','Fira Code',monospace;font-size:9px;background:rgba(137,180,250,.15);color:#89B4FA;padding:1px 6px;border-radius:2px" id="mac-badge-hero">● IDLE</span>
+          <span style="font-family:ui-monospace,'Cascadia Code','Fira Code',monospace;font-size:9px;color:rgba(255,255,255,.2);letter-spacing:.06em" id="mac-pos-hero">Ln 1, Col 1</span>
+          <span style="display:none;gap:3px;align-items:center" id="mac-typing-hero">
+            <span style="width:3px;height:3px;border-radius:50%;background:#A6E3A1;display:inline-block;animation:mbounce .8s ease-in-out infinite"></span>
+            <span style="width:3px;height:3px;border-radius:50%;background:#A6E3A1;display:inline-block;animation:mbounce .8s ease-in-out .15s infinite"></span>
+            <span style="width:3px;height:3px;border-radius:50%;background:#A6E3A1;display:inline-block;animation:mbounce .8s ease-in-out .3s infinite"></span>
+          </span>
+        </div>
+        <span style="font-family:ui-monospace,'Cascadia Code','Fira Code',monospace;font-size:9px;background:rgba(166,227,161,.12);color:#A6E3A1;padding:1px 6px;border-radius:2px" id="mac-lang-hero">JavaScript</span>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="strip rv">
+  <div class="strip-item"><div class="strip-n" data-target="7">0</div><div class="strip-l">Ниш в базе<br>и растёт</div></div>
+  <div class="strip-item"><div class="strip-n" data-target="8">0</div><div class="strip-l">Блоков<br>на лендинг</div></div>
+  <div class="strip-item"><div class="strip-n">~60</div><div class="strip-l">Секунд от ниши<br>до сайта</div></div>
+  <div class="strip-item"><div class="strip-n">3в1</div><div class="strip-l">Сайт + реклама + CRM<br>в одном кабинете</div></div>
+</div>
+<section id="how" style="background:var(--bg)">
+  <div class="s-mark rv"><span class="s-mark-n">01</span><span class="s-mark-l"></span><span class="s-mark-t">Как это работает</span></div>
+  <h2 class="s-title rv">AI <em>строит сайт</em><br>у вас на глазах</h2>
+  <div class="build-grid rv">
+    <div class="build-l">
+      <div class="step-row"><span class="step-n">01</span><div class="step-body"><h4>Вводите нишу</h4><p>Любая сфера. AI нормализует запрос и находит психографический профиль в базе.</p></div></div>
+      <div class="step-row"><span class="step-n">02</span><div class="step-body"><h4>Анализ аудитории</h4><p>Модель выявляет боли, страхи, триггеры доверия и формулирует УТП — конкретное, без воды.</p></div></div>
+      <div class="step-row"><span class="step-n">03</span><div class="step-body"><h4>Генерация блоков</h4><p>8 секций с заголовками, тезисами и CTA. Каждый блок закрывает конкретный страх или возражение.</p></div></div>
+      <div class="step-row"><span class="step-n">04</span><div class="step-body"><h4>Публикация и реклама</h4><p>Сайт выходит на поддомене. Объявления создаются автоматически из текстов страницы.</p></div></div>
+    </div>
+    <div class="build-r"><canvas id="bc"></canvas><div class="build-status" id="bs">Ожидание ниши</div></div>
+  </div>
+  <div class="three rv">
+    <div class="three-item"><div class="three-ic ic-acc"><svg viewBox="0 0 24 24" fill="none" stroke="#C2501F" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div><div class="three-title">Структура под ЦА</div><div class="three-text">Порядок блоков рассчитывается под психологию аудитории. Юристы и кофейни получают разные структуры.</div></div>
+    <div class="three-item"><div class="three-ic ic-grn"><svg viewBox="0 0 24 24" fill="none" stroke="#2D6A4F" stroke-width="1.5"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div><div class="three-title">Тексты без банальщины</div><div class="three-text">Встроенный quality-check блокирует «профессионализм» и «индивидуальный подход». Только конкретика.</div></div>
+    <div class="three-item"><div class="three-ic ic-blu"><svg viewBox="0 0 24 24" fill="none" stroke="#1D4E89" stroke-width="1.5"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></div><div class="three-title">Палитра по психологии</div><div class="three-text">Цвета выбираются по маркетинговым исследованиям, а не по вкусу. Юристу нужна глубина, косметологу — теплота.</div></div>
+  </div>
+</section>
+<section id="crm" style="background:var(--bg2)">
+  <div class="s-mark rv"><span class="s-mark-n">02</span><span class="s-mark-l"></span><span class="s-mark-t">CRM и реклама</span></div>
+  <div class="crm-layout">
+    <div class="crm-text rv">
+      <h3>Заявки,<br>реклама<br>и <em>аналитика</em><br>в одном месте</h3>
+      <p>Не нужно склеивать конструктор + CRM + рекламный кабинет + аналитику. Всё работает вместе с первого дня.</p>
+      <div class="crm-feats">
+        <div class="crm-feat"><div class="crm-dot"></div><div class="crm-feat-t"><strong>Автоматические объявления</strong> — AI берёт заголовки и боли из сайта и создаёт объявления для Яндекс.Директ и VK Ads</div></div>
+        <div class="crm-feat"><div class="crm-dot" style="background:var(--green)"></div><div class="crm-feat-t"><strong>UTM-трекинг сквозной</strong> — каждая заявка помечена источником, объявлением и стоимостью лида</div></div>
+        <div class="crm-feat"><div class="crm-dot" style="background:var(--blue)"></div><div class="crm-feat-t"><strong>Telegram-уведомления</strong> — новый лид в чат за секунды, с именем, телефоном и источником трафика</div></div>
+        <div class="crm-feat"><div class="crm-dot" style="background:var(--gold)"></div><div class="crm-feat-t"><strong>Воронка и статусы</strong> — ведите сделки от «новая заявка» до «клиент», видите конверсию на каждом шаге</div></div>
+      </div>
+    </div>
+    <div class="rv rv1">
+      <div class="crm-dash">
+        <div class="crm-bar"><div class="crm-dot2" style="background:#ff5f56"></div><div class="crm-dot2" style="background:#ffbd2e"></div><div class="crm-dot2" style="background:#27c93f"></div><span class="crm-bar-t">CRM · Alladin</span></div>
+        <div class="crm-sts">
+          <div class="crm-st"><div class="crm-st-n" style="color:var(--acc)">24</div><div class="crm-st-l">Заявок за неделю</div></div>
+          <div class="crm-st"><div class="crm-st-n" style="color:var(--green)">680₽</div><div class="crm-st-l">Средний лид</div></div>
+          <div class="crm-st"><div class="crm-st-n" style="color:var(--blue)">34%</div><div class="crm-st-l">В клиента</div></div>
+        </div>
+        <div class="crm-leads">
+          <div class="lead"><div class="lead-av">АС</div><div style="flex:1"><div class="lead-n">Алексей С.</div><div class="lead-src">Яндекс · «юрист претензия» · 340₽</div></div><span class="badge b-new">Новый</span></div>
+          <div class="lead"><div class="lead-av">МК</div><div style="flex:1"><div class="lead-n">Марина К.</div><div class="lead-src">VK · ретаргет · 210₽</div></div><span class="badge b-in">В работе</span></div>
+          <div class="lead"><div class="lead-av">ОП</div><div style="flex:1"><div class="lead-n">Олег П.</div><div class="lead-src">Telegram · органика</div></div><span class="badge b-won">Клиент</span></div>
+        </div>
+        <div class="crm-ads">
+          <div class="ads-l">Активные кабинеты</div>
+          <div class="ads-chips"><span class="ac ac-ya">Яндекс.Директ</span><span class="ac ac-vk">VK Реклама</span><span class="ac ac-tg">Telegram Ads</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="ex-section" id="examples">
+  <div class="ex-hdr rv"><h2>Примеры<br><em>сайтов</em></h2><span class="ex-hint">Листайте <span>→</span></span></div>
+  <div class="ex-track" id="ex-track">
+    <div class="ex-card"><div class="ex-prev"><div class="ms-wrap"><div class="ms" style="background:#f4f2ed"><div class="ms-nav" style="background:#1a2744"><div class="ms-lr" style="background:rgba(255,255,255,.3)"></div></div><div class="ms-hero" style="background:linear-gradient(135deg,#1a2744,#2d5080)"><div class="ms-h" style="color:#fff">Претензию получили?<br>Решим за 45 дней</div><div class="ms-s" style="color:rgba(255,255,255,.6)">Юридические услуги для ИП и ООО</div><div class="ms-btn" style="background:#c9a84c;color:#000">Бесплатная консультация</div></div><div class="ms-sec" style="background:#f4f2ed"><div class="ms-t" style="color:#1a2744">Кейсы</div><div class="ms-grid"><div class="ms-item" style="background:#e8e4d8"><b style="color:#1a2744">₽ 340 000</b>взыскано за 38 дней</div><div class="ms-item" style="background:#e8e4d8"><b style="color:#1a2744">0 штрафов</b>налоговая проверка</div></div></div><div class="ms-ft" style="background:#1a2744"><div class="ms-ft-t" style="color:rgba(255,255,255,.3)">Право.Дело · 11 лет практики</div></div></div></div><div class="ex-lbl">Юридические услуги</div></div><div class="ex-body"><div class="ex-ntag">Юридические услуги</div><div class="ex-hl">«Претензию получили? Решим за 45 дней без потери денег»</div><div class="ex-meta"><span class="ex-chip">hero→pain→cases→faq</span><span class="ex-chip">8 блоков</span></div></div></div>
+    <div class="ex-card"><div class="ex-prev"><div class="ms-wrap"><div class="ms" style="background:#f0ede5"><div class="ms-nav" style="background:#1e3a2f"><div class="ms-lr" style="background:rgba(255,255,255,.3)"></div></div><div class="ms-hero" style="background:linear-gradient(135deg,#1e3a2f,#2d5a40)"><div class="ms-h" style="color:#fff">Ремонт как для себя.<br>Смета не вырастет</div><div class="ms-s" style="color:rgba(255,255,255,.55)">Квартиры в Москве · гарантия 3 года</div><div class="ms-btn" style="background:#4caf7d;color:#fff">Замер бесплатно</div></div><div class="ms-sec" style="background:#f0ede5"><div class="ms-t" style="color:#1e3a2f">Работы</div><div class="ms-grid"><div class="ms-item" style="background:#e2e8df"><b style="color:#1e3a2f">До / После</b>Кухня 12м² · 28 дней</div><div class="ms-item" style="background:#e2e8df"><b style="color:#1e3a2f">Договор</b>Фиксированная цена</div></div></div><div class="ms-ft" style="background:#1e3a2f"><div class="ms-ft-t" style="color:rgba(255,255,255,.3)">СтройМастер · 7 лет</div></div></div></div><div class="ex-lbl">Ремонт квартир</div></div><div class="ex-body"><div class="ex-ntag">Ремонт квартир</div><div class="ex-hl">«Ремонт как для себя — смета не вырастет»</div><div class="ex-meta"><span class="ex-chip">hero→portfolio→price</span><span class="ex-chip">8 блоков</span></div></div></div>
+    <div class="ex-card"><div class="ex-prev"><div class="ms-wrap"><div class="ms" style="background:#f8f0ec"><div class="ms-nav" style="background:#3d2020"><div class="ms-lr" style="background:rgba(255,255,255,.3)"></div></div><div class="ms-hero" style="background:linear-gradient(135deg,#3d2020,#6b3535)"><div class="ms-h" style="color:#fff">Мастер, который<br>понимает с полуслова</div><div class="ms-s" style="color:rgba(255,255,255,.55)">Салон красоты · Патриаршие</div><div class="ms-btn" style="background:#d4836a;color:#fff">Записаться</div></div><div class="ms-sec" style="background:#f8f0ec"><div class="ms-t" style="color:#6b3535">Услуги</div><div class="ms-grid"><div class="ms-item" style="background:#ede0da"><b style="color:#3d2020">Колорирование</b>от 4 500 ₽</div><div class="ms-item" style="background:#ede0da"><b style="color:#3d2020">Стрижка</b>от 1 800 ₽</div></div></div><div class="ms-ft" style="background:#3d2020"><div class="ms-ft-t" style="color:rgba(255,255,255,.3)">Studio Lumière · онлайн-запись</div></div></div></div><div class="ex-lbl">Салон красоты</div></div><div class="ex-body"><div class="ex-ntag">Салон красоты</div><div class="ex-hl">«Мастер, который понимает с полуслова»</div><div class="ex-meta"><span class="ex-chip">hero→portfolio→book</span><span class="ex-chip">7 блоков</span></div></div></div>
+    <div class="ex-card"><div class="ex-prev"><div class="ms-wrap"><div class="ms" style="background:#f2f0eb"><div class="ms-nav" style="background:#1b2b4b"><div class="ms-lr" style="background:rgba(255,255,255,.3)"></div></div><div class="ms-hero" style="background:linear-gradient(135deg,#1b2b4b,#2d5fa0)"><div class="ms-h" style="color:#fff">Бизнес без потолка.<br>Система за 90 дней</div><div class="ms-s" style="color:rgba(255,255,255,.55)">Консалтинг для собственников МСБ</div><div class="ms-btn" style="background:#e8a94d;color:#000">Аудит бесплатно</div></div><div class="ms-sec" style="background:#f2f0eb"><div class="ms-t" style="color:#1b2b4b">Результаты</div><div class="ms-grid"><div class="ms-item" style="background:#e4e0d4"><b style="color:#1b2b4b">×2.4 выручка</b>за 6 месяцев</div><div class="ms-item" style="background:#e4e0d4"><b style="color:#1b2b4b">−40% времени</b>собственника</div></div></div><div class="ms-ft" style="background:#1b2b4b"><div class="ms-ft-t" style="color:rgba(255,255,255,.3)">BusinessCore · 8 лет</div></div></div></div><div class="ex-lbl">Консалтинг</div></div><div class="ex-body"><div class="ex-ntag">Бизнес-консалтинг</div><div class="ex-hl">«Бизнес без потолка — система за 90 дней»</div><div class="ex-meta"><span class="ex-chip">hero→pain→cases→offer</span><span class="ex-chip">8 блоков</span></div></div></div>
+    <div class="ex-card"><div class="ex-prev"><div class="ms-wrap"><div class="ms" style="background:#eef2f0"><div class="ms-nav" style="background:#1b3a2f"><div class="ms-lr" style="background:rgba(255,255,255,.3)"></div></div><div class="ms-hero" style="background:linear-gradient(135deg,#1b3a2f,#2d6a4f)"><div class="ms-h" style="color:#fff">Штрафов нет.<br>Гарантируем письменно</div><div class="ms-s" style="color:rgba(255,255,255,.55)">Бухгалтерия для ИП и ООО</div><div class="ms-btn" style="background:#52b788;color:#fff">2 месяца бесплатно</div></div><div class="ms-sec" style="background:#eef2f0"><div class="ms-t" style="color:#1b3a2f">Гарантия</div><div class="ms-grid"><div class="ms-item" style="background:#dceee6"><b style="color:#1b3a2f">0 штрафов</b>за 8 лет работы</div><div class="ms-item" style="background:#dceee6"><b style="color:#1b3a2f">340+ фирм</b>на обслуживании</div></div></div><div class="ms-ft" style="background:#1b3a2f"><div class="ms-ft-t" style="color:rgba(255,255,255,.3)">БухПро · полная ответственность</div></div></div></div><div class="ex-lbl">Бухгалтерия</div></div><div class="ex-body"><div class="ex-ntag">Бухгалтерское обслуживание</div><div class="ex-hl">«Штрафов нет — гарантируем письменно»</div><div class="ex-meta"><span class="ex-chip">hero→proof→offer</span><span class="ex-chip">8 блоков</span></div></div></div>
+  </div>
+</section>
+<section class="cta-s" id="cta">
+  <div class="cta-inner">
+    <div class="s-mark rv" style="margin-bottom:48px"><span class="s-mark-n" style="color:rgba(244,241,235,.22)">03</span><span class="s-mark-l" style="background:rgba(244,241,235,.1)"></span><span class="s-mark-t" style="color:rgba(244,241,235,.3)">Начать сейчас</span></div>
+    <h2 class="cta-h rv">Введите нишу —<br>получите <em>сайт,<br>рекламу и CRM</em></h2>
+    <p class="cta-p rv">Без дизайнера. Без агентства. Без ожидания.<br>Первый результат — через 60 секунд.</p>
+    <div class="cta-field rv"><input type="text" id="c-inp" placeholder="Например: психолог онлайн" onkeydown="if(event.key==='Enter')gen('c-inp')"><button onclick="gen('c-inp')">Создать сайт →</button></div>
+    <div class="cta-note rv">Бесплатно · без регистрации · JSON можно скачать</div>
+    <div class="cta-pills rv rv1"><span class="cta-pill">Сайт за 60 секунд</span><span class="cta-pill">Автоматические объявления</span><span class="cta-pill">CRM с воронкой</span><span class="cta-pill">Telegram-уведомления</span></div>
+  </div>
+</section>
+<footer><span class="flogo">Alladin</span><span class="fnote">v2.0 · AI · сайт + реклама + CRM</span></footer>
+<div id="drawer">
+  <div class="dh"><span class="dh-t" id="d-niche">Blueprint</span><button class="dh-x" onclick="closeD()">×</button></div>
+  <div class="d-load" id="d-load"><div class="d-sp"></div><div class="d-lt" id="d-lt">Анализируем нишу…</div></div>
+  <div class="d-err" id="d-err"></div>
+  <div class="d-body" id="d-body">
+    <div class="d-tabs"><button class="d-tab on" onclick="stab('utp',this)">УТП</button><button class="d-tab" onclick="stab('secs',this)">Блоки</button><button class="d-tab" onclick="stab('pal',this)">Стиль</button></div>
+    <div class="d-panel on" id="tp-utp"><div class="d-um" id="d-us"></div><div class="d-ul" id="d-ul"></div><div class="d-fg"><div class="d-fl">Оффер</div><div class="d-fv" id="d-of"></div></div><div class="d-fg"><div class="d-fl">Механика отличия</div><div class="d-fv" id="d-mech"></div></div><div class="d-fg"><div class="d-fl">Сегмент</div><div class="d-fv" id="d-seg"></div></div><div class="d-fg"><div class="d-fl">Главная проблема ЦА</div><div class="d-fv" id="d-prob"></div></div></div>
+    <div class="d-panel" id="tp-secs"></div>
+    <div class="d-panel" id="tp-pal"><div id="d-pw"></div><div class="d-fg" style="margin-top:12px"><div class="d-fl">Tone of voice</div><div class="d-fv" id="d-tov"></div></div></div>
+  </div>
+  <div class="d-btns" id="d-btns" style="display:none"><button class="d-copy" onclick="cpAll()">Скопировать всё в конструктор</button><button class="d-dl" onclick="dlJSON()">Скачать JSON ↓</button></div>
+</div>
+<script>
+const cur=document.getElementById('cur'),curo=document.getElementById('cur-o');
+let mx=0,my=0,ox=0,oy=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px'});
+(function la(){ox+=(mx-ox)*.13;oy+=(my-oy)*.13;curo.style.left=ox+'px';curo.style.top=oy+'px';requestAnimationFrame(la)})();
+document.querySelectorAll('a,button,input,.ex-card,.d-sh,.pillar').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cur.style.width='14px';cur.style.height='14px';curo.style.width='46px';curo.style.height='46px'});
+  el.addEventListener('mouseleave',()=>{cur.style.width='8px';cur.style.height='8px';curo.style.width='32px';curo.style.height='32px'});
+});
+const rio=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('in');rio.unobserve(x.target)}}),{threshold:.1});
+document.querySelectorAll('.rv').forEach(el=>rio.observe(el));
+const cio=new IntersectionObserver(e=>e.forEach(x=>{if(!x.isIntersecting)return;const el=x.target,t=+el.dataset.target,d=1100,s=performance.now();(function f(n){const p=Math.min((n-s)/d,1);el.textContent=Math.round(p*t);if(p<1)requestAnimationFrame(f)})(s);cio.unobserve(el)}),{threshold:.5});
+document.querySelectorAll('[data-target]').forEach(el=>cio.observe(el));
+const cv=document.getElementById('bc'),ctx2=cv.getContext('2d'),ba=document.querySelector('.build-r');
+function rsz(){cv.width=ba.offsetWidth;cv.height=ba.offsetHeight}rsz();window.addEventListener('resize',rsz);
+const BLK=[{l:'NAV',x:0,y:0,w:1,h:.06,c:'rgba(194,80,31,.35)'},{l:'HERO',x:0,y:.07,w:1,h:.22,c:'rgba(194,80,31,.1)'},{l:'PAIN',x:0,y:.30,w:.48,h:.18,c:'rgba(45,106,79,.12)'},{l:'PROOF',x:.5,y:.30,w:.5,h:.18,c:'rgba(29,78,137,.12)'},{l:'PROCESS',x:0,y:.50,w:1,h:.15,c:'rgba(194,80,31,.07)'},{l:'CASES',x:0,y:.67,w:.65,h:.18,c:'rgba(181,134,13,.1)'},{l:'TRUST',x:.67,y:.67,w:.33,h:.18,c:'rgba(45,106,79,.1)'},{l:'CTA',x:0,y:.87,w:1,h:.1,c:'rgba(194,80,31,.25)'}];
+const STS=['Ищем аудиторию…','Анализируем боли…','Генерируем УТП…','Строим структуру…','Пишем тексты…','Готово ✓'];
+let af=0,si=0,st=0;
+function drawB(ts){const W=cv.width,H=cv.height;ctx2.clearRect(0,0,W,H);ctx2.strokeStyle='rgba(28,25,23,.05)';ctx2.lineWidth=.5;for(let i=1;i<8;i++){ctx2.beginPath();ctx2.moveTo(W*i/8,0);ctx2.lineTo(W*i/8,H);ctx2.stroke()}for(let i=1;i<5;i++){ctx2.beginPath();ctx2.moveTo(0,H*i/5);ctx2.lineTo(W,H*i/5);ctx2.stroke()}const prog=Math.min(af/3,BLK.length);for(let i=0;i<BLK.length;i++){const b=BLK[i],a=Math.max(0,Math.min(1,prog-i));if(a<=0)continue;const bx=b.x*W,by=b.y*H,bw=b.w*W-4,bh=b.h*H-4;ctx2.globalAlpha=a*.9;ctx2.fillStyle=b.c;ctx2.fillRect(bx+2,by+2,bw,bh);ctx2.globalAlpha=a*.4;ctx2.strokeStyle='rgba(28,25,23,.15)';ctx2.lineWidth=.5;ctx2.strokeRect(bx+2,by+2,bw,bh);ctx2.globalAlpha=a*.55;ctx2.fillStyle='rgba(28,25,23,.6)';ctx2.font='400 9px DM Mono,monospace';ctx2.fillText(b.l,bx+9,by+14);if(Math.floor(prog)===i&&a<1){const sy=by+2+bh*(a%1);ctx2.globalAlpha=.35;ctx2.strokeStyle='rgba(194,80,31,.7)';ctx2.lineWidth=1;ctx2.beginPath();ctx2.moveTo(bx+2,sy);ctx2.lineTo(bx+2+bw,sy);ctx2.stroke()}}ctx2.globalAlpha=1;if(ts-st>1100){st=ts;si=(si+1)%STS.length;document.getElementById('bs').textContent=STS[si]}af+=.035;if(af>BLK.length+1.5)af=0;requestAnimationFrame(drawB)}
+requestAnimationFrame(drawB);
+const tr=document.getElementById('ex-track');let dn=false,sx2,sl2;
+tr.addEventListener('mousedown',e=>{dn=true;sx2=e.pageX-tr.offsetLeft;sl2=tr.scrollLeft});
+tr.addEventListener('mouseleave',()=>dn=false);tr.addEventListener('mouseup',()=>dn=false);
+tr.addEventListener('mousemove',e=>{if(!dn)return;e.preventDefault();tr.scrollLeft=sl2-(e.pageX-tr.offsetLeft-sx2)*1.5});
+const API=window.location.origin;let last=null;
+function gen(id){const v=document.getElementById(id).value.trim();if(!v)return;openD(v);fetch(`${API}/api/site-blueprint`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({niche:v})}).then(r=>r.json()).then(j=>{if(j.ok)rend(j);else fetch(`${API}/api/analyze`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({niche:v})}).then(r=>r.json()).then(j2=>j2.ok?rendFb(j2):showErr(j2.error))}).catch(e=>showErr(e.message))}
+function openD(n){document.getElementById('d-niche').textContent=n;document.getElementById('d-load').classList.add('on');document.getElementById('d-body').classList.remove('on');document.getElementById('d-btns').style.display='none';document.getElementById('d-err').style.display='none';document.getElementById('drawer').classList.add('open');const tt=['Анализируем нишу…','Ищем ЦА…','Строим структуру…','Пишем тексты…'];let i=0;window._lt=setInterval(()=>document.getElementById('d-lt').textContent=tt[i=(i+1)%tt.length],950)}
+function closeD(){document.getElementById('drawer').classList.remove('open')}
+function rend(j){clearInterval(window._lt);last=j;const d=j.data;document.getElementById('d-load').classList.remove('on');document.getElementById('d-body').classList.add('on');document.getElementById('d-btns').style.display='flex';set('d-us',d.utp_short);set('d-ul',d.utp_long);set('d-of',d.offer);set('d-mech',d.unique_mechanism);set('d-seg',d.target_segment);set('d-prob',d.core_problem);set('d-tov',d.tone_of_voice);const sw=document.getElementById('tp-secs');sw.innerHTML='';(d.sections||[]).forEach((s,i)=>{const el=document.createElement('div');el.className='d-sec'+(i===0?' open':'');el.innerHTML=`<div class="d-sh" onclick="this.parentElement.classList.toggle('open')"><span class="d-sid">${e(s.id)}</span><span class="d-shl">${e(s.headline)}</span></div><div class="d-sb">${s.subheadline?`<div style="margin-bottom:7px;color:var(--ink2)">${e(s.subheadline)}</div>`:''}${(s.bullets||[]).length?`<ul class="d-buls">${s.bullets.map(b=>`<li>${e(b)}</li>`).join('')}</ul>`:''}${s.cta?`<div class="d-cp">CTA: ${e(s.cta)}</div>`:''}${(s.trust_elements||[]).length?`<div style="margin-top:7px;display:flex;flex-wrap:wrap;gap:4px">${s.trust_elements.map(t=>`<span class="d-cp">${e(t)}</span>`).join('')}</div>`:''}</div>`;sw.appendChild(el)});const pw=document.getElementById('d-pw');pw.innerHTML='<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">'+(d.palette||[]).map(p=>`<div class="d-sw"><div class="d-swc" style="background:${e(p.hex)}"></div><div class="d-swb"><div class="d-swr">${e(p.role)}</div><div class="d-swh">${e(p.hex)}</div><div class="d-sww">${e(p.reason)}</div></div></div>`).join('')+'</div>'}
+function rendFb(j){clearInterval(window._lt);last=j;const d=j.data;document.getElementById('d-load').classList.remove('on');document.getElementById('d-body').classList.add('on');document.getElementById('d-btns').style.display='flex';set('d-us',d.headline_formula||'');set('d-ul',d.client_portrait||'');set('d-of',d.cta||'');set('d-mech',(d.trust_triggers||[]).join(' · '));set('d-seg','');set('d-prob',(d.pains||[]).join(' · '));set('d-tov',d.tone_of_voice||'');document.getElementById('tp-secs').innerHTML='<div style="padding:18px 0;font-family:var(--mono);font-size:11px;color:var(--ink3)">Используется базовый анализ — блоки недоступны</div>';const pw=document.getElementById('d-pw');pw.innerHTML='<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">'+(d.palette||[]).map(p=>`<div class="d-sw"><div class="d-swc" style="background:${e(p.hex)}"></div><div class="d-swb"><div class="d-swr">${e(p.role)}</div><div class="d-swh">${e(p.hex)}</div></div></div>`).join('')+'</div>'}
+function showErr(msg){clearInterval(window._lt);document.getElementById('d-load').classList.remove('on');const el=document.getElementById('d-err');el.style.display='block';el.innerHTML='<div style="padding:16px 26px">Ошибка: '+e(msg)+'</div>'}
+function stab(id,btn){document.querySelectorAll('.d-tab').forEach(t=>t.classList.remove('on'));btn.classList.add('on');['utp','secs','pal'].forEach(t=>document.getElementById('tp-'+t).classList.toggle('on',t===id))}
+function cpAll(){if(!last)return;const d=last.data,ls=[];if(d.utp_short)ls.push('УТП: '+d.utp_short);if(d.utp_long)ls.push(d.utp_long);if(d.offer)ls.push('\nОффер: '+d.offer);(d.sections||[]).forEach(s=>{ls.push(`\n[${s.id}] ${s.headline}`);if(s.subheadline)ls.push(s.subheadline);(s.bullets||[]).forEach(b=>ls.push('• '+b));if(s.cta)ls.push('CTA: '+s.cta)});navigator.clipboard.writeText(ls.join('\n'));const btn=document.querySelector('.d-copy');btn.textContent='Скопировано ✓';setTimeout(()=>btn.textContent='Скопировать всё в конструктор',2000)}
+function dlJSON(){if(!last)return;const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(last.data,null,2)],{type:'application/json'}));a.download=`blueprint-${Date.now()}.json`;a.click()}
+function set(id,v){const el=document.getElementById(id);if(el)el.textContent=v||''}
+function e(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+
+/* ── Mac hero editor ── */
+const MAC_TABS=[
+  {file:'analyze.js',lang:'JavaScript'},
+  {file:'site.html', lang:'HTML'},
+  {file:'ads.json',  lang:'JSON'},
+];
+const MAC_CODE=[
+  [
+    '<span style="color:#585B70;font-style:italic">// Alladin AI · niche analyzer</span>',
+    '<span style="color:#CBA6F7">import</span> <span style="color:#CDD6F4">Anthropic</span> <span style="color:#CBA6F7">from</span> <span style="color:#A6E3A1">\'@anthropic-ai/sdk\'</span><span style="color:#CDD6F4">;</span>',
+    '',
+    '<span style="color:#CBA6F7">const</span> <span style="color:#FAB387">niche</span> <span style="color:#CDD6F4">=</span> <span style="color:#A6E3A1">"юридические услуги"</span><span style="color:#CDD6F4">;</span>',
+    '<span style="color:#CBA6F7">const</span> <span style="color:#FAB387">client</span> <span style="color:#CDD6F4">=</span> <span style="color:#CBA6F7">new</span> <span style="color:#89B4FA">Anthropic</span><span style="color:#CDD6F4">();</span>',
+    '',
+    '<span style="color:#CBA6F7">async function</span> <span style="color:#89B4FA">analyzeNiche</span><span style="color:#CDD6F4">(</span><span style="color:#FAB387">raw</span><span style="color:#CDD6F4">) {</span>',
+    '  <span style="color:#CBA6F7">const</span> <span style="color:#FAB387">res</span> <span style="color:#CDD6F4">=</span> <span style="color:#CBA6F7">await</span> <span style="color:#FAB387">client</span><span style="color:#CDD6F4">.</span><span style="color:#89B4FA">messages</span><span style="color:#CDD6F4">.</span><span style="color:#89B4FA">create</span><span style="color:#CDD6F4">({</span>',
+    '    <span style="color:#89DCEB">model</span><span style="color:#CDD6F4">:</span> <span style="color:#A6E3A1">\'claude-sonnet-4-20250514\'</span><span style="color:#CDD6F4">,</span>',
+    '    <span style="color:#89DCEB">max_tokens</span><span style="color:#CDD6F4">:</span> <span style="color:#FAB387">1200</span><span style="color:#CDD6F4">,</span>',
+    '    <span style="color:#89DCEB">system</span><span style="color:#CDD6F4">:</span> <span style="color:#89B4FA">BLUEPRINT_SYSTEM</span><span style="color:#CDD6F4">(</span><span style="color:#FAB387">retrieved</span><span style="color:#CDD6F4">),</span>',
+    '    <span style="color:#89DCEB">messages</span><span style="color:#CDD6F4">: [{</span>',
+    '      <span style="color:#89DCEB">role</span><span style="color:#CDD6F4">:</span> <span style="color:#A6E3A1">\'user\'</span><span style="color:#CDD6F4">,</span>',
+    '      <span style="color:#89DCEB">content</span><span style="color:#CDD6F4">:</span> <span style="color:#A6E3A1">`Ниша: "${</span><span style="color:#FAB387">raw</span><span style="color:#A6E3A1">}"`</span>',
+    '    <span style="color:#CDD6F4">}]</span>',
+    '  <span style="color:#CDD6F4">});</span>',
+    '  <span style="color:#CBA6F7">return</span> <span style="color:#89B4FA">JSON</span><span style="color:#CDD6F4">.</span><span style="color:#89B4FA">parse</span><span style="color:#CDD6F4">(</span><span style="color:#FAB387">res</span><span style="color:#CDD6F4">.</span><span style="color:#FAB387">content</span><span style="color:#CDD6F4">[</span><span style="color:#FAB387">0</span><span style="color:#CDD6F4">].</span><span style="color:#FAB387">text</span><span style="color:#CDD6F4">);</span>',
+    '<span style="color:#CDD6F4">}</span>',
+    '',
+    '<span style="color:#89B4FA">analyzeNiche</span><span style="color:#CDD6F4">(</span><span style="color:#FAB387">niche</span><span style="color:#CDD6F4">).</span><span style="color:#89B4FA">then</span><span style="color:#CDD6F4">(</span><span style="color:#FAB387">d</span> <span style="color:#CDD6F4">=></span> <span style="color:#CDD6F4">{</span>',
+    '  <span style="color:#89B4FA">console</span><span style="color:#CDD6F4">.</span><span style="color:#89B4FA">log</span><span style="color:#CDD6F4">(</span><span style="color:#A6E3A1">\'УТП:\'</span><span style="color:#CDD6F4">,</span> <span style="color:#FAB387">d</span><span style="color:#CDD6F4">.</span><span style="color:#FAB387">utp_short</span><span style="color:#CDD6F4">);</span>',
+    '  <span style="color:#89B4FA">buildSite</span><span style="color:#CDD6F4">(</span><span style="color:#FAB387">d</span><span style="color:#CDD6F4">);</span>',
+    '<span style="color:#CDD6F4">});</span>',
+  ],
+  [
+    '<span style="color:#585B70;font-style:italic">&lt;!-- сгенерировано для: юридические услуги --&gt;</span>',
+    '<span style="color:#CBA6F7">&lt;section</span> <span style="color:#89DCEB">class</span><span style="color:#CDD6F4">=</span><span style="color:#A6E3A1">"hero"</span><span style="color:#CBA6F7">&gt;</span>',
+    '  <span style="color:#CBA6F7">&lt;div</span> <span style="color:#89DCEB">class</span><span style="color:#CDD6F4">=</span><span style="color:#A6E3A1">"hero-inner"</span><span style="color:#CBA6F7">&gt;</span>',
+    '    <span style="color:#CBA6F7">&lt;h1&gt;</span>',
+    '      <span style="color:#CDD6F4">Претензию получили?</span>',
+    '      <span style="color:#CDD6F4">Решим за 45 дней</span>',
+    '    <span style="color:#CBA6F7">&lt;/h1&gt;</span>',
+    '    <span style="color:#CBA6F7">&lt;p</span> <span style="color:#89DCEB">class</span><span style="color:#CDD6F4">=</span><span style="color:#A6E3A1">"sub"</span><span style="color:#CBA6F7">&gt;</span>',
+    '      <span style="color:#CDD6F4">Юридические услуги для ИП и ООО.</span>',
+    '      <span style="color:#CDD6F4">Первая консультация бесплатно.</span>',
+    '    <span style="color:#CBA6F7">&lt;/p&gt;</span>',
+    '    <span style="color:#CBA6F7">&lt;button</span> <span style="color:#89DCEB">class</span><span style="color:#CDD6F4">=</span><span style="color:#A6E3A1">"cta"</span><span style="color:#CBA6F7">&gt;</span>',
+    '      <span style="color:#CDD6F4">Описать ситуацию →</span>',
+    '    <span style="color:#CBA6F7">&lt;/button&gt;</span>',
+    '    <span style="color:#CBA6F7">&lt;div</span> <span style="color:#89DCEB">class</span><span style="color:#CDD6F4">=</span><span style="color:#A6E3A1">"stats"</span><span style="color:#CBA6F7">&gt;</span>',
+    '      <span style="color:#CBA6F7">&lt;span&gt;</span><span style="color:#CDD6F4">340+ дел</span><span style="color:#CBA6F7">&lt;/span&gt;</span>',
+    '      <span style="color:#CBA6F7">&lt;span&gt;</span><span style="color:#CDD6F4">92% выиграно</span><span style="color:#CBA6F7">&lt;/span&gt;</span>',
+    '    <span style="color:#CBA6F7">&lt;/div&gt;</span>',
+    '  <span style="color:#CBA6F7">&lt;/div&gt;</span>',
+    '<span style="color:#CBA6F7">&lt;/section&gt;</span>',
+  ],
+  [
+    '<span style="color:#CDD6F4">{</span>',
+    '  <span style="color:#89DCEB">"niche"</span><span style="color:#CDD6F4">:</span> <span style="color:#A6E3A1">"юридические услуги"</span><span style="color:#CDD6F4">,</span>',
+    '  <span style="color:#89DCEB">"campaigns"</span><span style="color:#CDD6F4">: [</span>',
+    '    <span style="color:#CDD6F4">{</span>',
+    '      <span style="color:#89DCEB">"platform"</span><span style="color:#CDD6F4">:</span> <span style="color:#A6E3A1">"yandex_direct"</span><span style="color:#CDD6F4">,</span>',
+    '      <span style="color:#89DCEB">"headline_1"</span><span style="color:#CDD6F4">:</span> <span style="color:#A6E3A1">"Юрист для бизнеса?"</span><span style="color:#CDD6F4">,</span>',
+    '      <span style="color:#89DCEB">"headline_2"</span><span style="color:#CDD6F4">:</span> <span style="color:#A6E3A1">"Решим за 45 дней"</span><span style="color:#CDD6F4">,</span>',
+    '      <span style="color:#89DCEB">"description"</span><span style="color:#CDD6F4">:</span> <span style="color:#A6E3A1">"Бесплатная консультация"</span><span style="color:#CDD6F4">,</span>',
+    '      <span style="color:#89DCEB">"utm_source"</span><span style="color:#CDD6F4">:</span> <span style="color:#A6E3A1">"yandex"</span><span style="color:#CDD6F4">,</span>',
+    '      <span style="color:#89DCEB">"budget_daily"</span><span style="color:#CDD6F4">:</span> <span style="color:#FAB387">500</span>',
+    '    <span style="color:#CDD6F4">},</span>',
+    '    <span style="color:#CDD6F4">{</span>',
+    '      <span style="color:#89DCEB">"platform"</span><span style="color:#CDD6F4">:</span> <span style="color:#A6E3A1">"vk_ads"</span><span style="color:#CDD6F4">,</span>',
+    '      <span style="color:#89DCEB">"headline"</span><span style="color:#CDD6F4">:</span> <span style="color:#A6E3A1">"Первая встреча бесплатно"</span><span style="color:#CDD6F4">,</span>',
+    '      <span style="color:#89DCEB">"age_from"</span><span style="color:#CDD6F4">:</span> <span style="color:#FAB387">30</span><span style="color:#CDD6F4">,</span>',
+    '      <span style="color:#89DCEB">"age_to"</span><span style="color:#CDD6F4">:</span> <span style="color:#FAB387">55</span><span style="color:#CDD6F4">,</span>',
+    '      <span style="color:#89DCEB">"budget_daily"</span><span style="color:#CDD6F4">:</span> <span style="color:#FAB387">300</span>',
+    '    <span style="color:#CDD6F4">}</span>',
+    '  <span style="color:#CDD6F4">]</span>',
+    '<span style="color:#CDD6F4">}</span>',
+  ]
+];
+
+let macTab=0, macTimer=null, macTabTimer=null;
+
+function macRender(lines){
+  const co=document.getElementById('mac-code-hero');
+  const ln=document.getElementById('mac-lns-hero');
+  if(!co||!ln) return;
+  co.innerHTML=lines.map(l=>`<div style="min-height:18px">${l||'&nbsp;'}</div>`).join('');
+  ln.innerHTML=lines.map((_,i)=>`<span class="mac-ln">${i+1}</span>`).join('');
+}
+
+function macSwitchTab(idx){
+  macTab=idx;
+  document.querySelectorAll('.mht').forEach((t,i)=>{
+    t.className='mht '+(i===idx?'on':'off');
+  });
+  const f=document.getElementById('mac-file-hero');
+  const l=document.getElementById('mac-lang-hero');
+  if(f) f.textContent=MAC_TABS[idx].file;
+  if(l) l.textContent=MAC_TABS[idx].lang;
+}
+
+function macTypeTab(tabIdx){
+  if(tabIdx>=MAC_CODE.length){
+    const b=document.getElementById('mac-badge-hero');
+    const t=document.getElementById('mac-typing-hero');
+    if(b){b.textContent='✓ DONE';b.style.background='rgba(166,227,161,.15)';b.style.color='#A6E3A1';}
+    if(t) t.style.display='none';
+    macTabTimer=setTimeout(()=>macTypeTab(0), 3200);
+    return;
+  }
+  macSwitchTab(tabIdx);
+  const lines=MAC_CODE[tabIdx];
+  let li=0, ci=0;
+  const rendered=[];
+  clearInterval(macTimer);
+
+  macTimer=setInterval(()=>{
+    if(li>=lines.length){
+      clearInterval(macTimer);
+      macTabTimer=setTimeout(()=>macTypeTab(tabIdx+1), 500);
+      return;
+    }
+    const full=lines[li];
+    const stripped=full.replace(/<[^>]+>/g,'');
+    if(ci<stripped.length){
+      ci++;
+      let vis=0,out='';let inTag=false;
+      for(let i=0;i<full.length;i++){
+        if(full[i]==='<') inTag=true;
+        if(!inTag){if(vis<ci){out+=full[i];vis++;}else break;}
+        else out+=full[i];
+        if(full[i]==='>') inTag=false;
+      }
+      const disp=[...rendered,out+'<span class="mac-cur"></span>'];
+      macRender(disp);
+      const pos=document.getElementById('mac-pos-hero');
+      if(pos) pos.textContent=`Ln ${li+1}, Col ${ci+1}`;
+    } else {
+      rendered[li]=full; li++; ci=0;
+    }
+  }, 16);
+}
+
+function macStart(){
+  clearInterval(macTimer); clearTimeout(macTabTimer);
+  const b=document.getElementById('mac-badge-hero');
+  const t=document.getElementById('mac-typing-hero');
+  if(b){b.textContent='● RUN';b.style.background='rgba(137,180,250,.15)';b.style.color='#89B4FA';}
+  if(t) t.style.display='flex';
+  macTypeTab(0);
+}
+
+window.addEventListener('load',()=>{
+  // Tab clicks
+  document.querySelectorAll('.mht').forEach((tab,i)=>{
+    tab.addEventListener('click',()=>{ macSwitchTab(i); macRender(MAC_CODE[i]); });
+  });
+  // Show first 5 lines immediately
+  macRender(MAC_CODE[0].slice(0,5));
+  // Start typing after short delay
+  setTimeout(macStart, 800);
+  // Re-trigger on input
+  const hInp=document.getElementById('h-inp');
+  if(hInp) hInp.addEventListener('keydown',ev=>{if(ev.key==='Enter'){clearTimeout(macTabTimer);clearInterval(macTimer);macStart();}});
+  const goBtn=document.querySelector('.hero-go');
+  if(goBtn) goBtn.addEventListener('click',()=>{clearTimeout(macTabTimer);clearInterval(macTimer);macStart();});
+});
+</script>
+</body>
+</html>
