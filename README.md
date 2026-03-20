@@ -1,234 +1,60 @@
-# Alladin v2 — генератор сайта под нишу
+# Alladin v2 — AI Site Generator
 
-AI-сервис: ниша → УТП + структура лендинга + готовые тексты всех блоков.
+Прод: https://alladin-ebon.vercel.app | Dashboard: /dashboard
 
-**Прод:** https://alladin-ebon.vercel.app  
-**Health:** https://alladin-ebon.vercel.app/api/health
+## Новые файлы этапа 2
 
----
-
-## Что изменилось в v2
-
-| | v1 | v2 |
-|---|---|---|
-| Вывод | боли/страхи/палитра | + УТП + оффер + тексты всех блоков |
-| Endpoints | `/api/analyze` | + `/api/site-blueprint` (новый) |
-| UI | JSON-view | карточный: УТП, секции, копирование |
-| Режимы | — | Малый бизнес / Агентство / Фрилансер |
-| Quality check | — | автопроверка на банальщину |
-
----
-
-## Endpoints
-
-### GET /api/health
-```json
-{ "ok": true, "ts": 1234567890, "version": "2.0.0" }
+```
+src/store.js              — файловый стор (read/write/delete/list)
+src/builder.js            — blueprint → HTML лендинг
+api/site/generate.js      — POST /api/site/generate
+api/site/[siteId].js      — GET/DELETE /api/site/:siteId(/:action)
+api/sites.js              — GET /api/sites
+dashboard.html            — IT Dashboard
+vercel.json               — обновлён роутинг
 ```
 
----
-
-### POST /api/analyze
-Обратная совместимость — психографический профиль ЦА.
-
-**Request:**
-```json
-{ "niche": "юридические услуги для ИП" }
-```
-
-**Response:**
-```json
-{
-  "ok": true,
-  "cached": true,
-  "ms": 1240,
-  "data": {
-    "niche": "Юридические услуги для бизнеса",
-    "client_portrait": "Собственник ИП/ООО, острая ситуация прямо сейчас...",
-    "pains": ["Пришла претензия и не знаю как реагировать", "..."],
-    "fears": ["Юрист возьмёт деньги и исчезнет", "..."],
-    "trust_triggers": ["Кейс с цифрами из похожего дела", "..."],
-    "tone_of_voice": "Чёткий, уверенный, без жаргона",
-    "headline_formula": "[Проблема] — решим за [срок] без [страх]",
-    "cta": "Опишите ситуацию — ответим за 60 минут",
-    "palette": [
-      { "role": "primary", "hex": "#1A2744", "reason": "авторитет" }
-    ],
-    "block_order": ["hero", "pain_points", "cases", "trust", "faq", "cta_final"]
-  }
-}
-```
-
----
-
-### POST /api/site-blueprint  ← НОВЫЙ
-Полный blueprint лендинга с текстами всех блоков.
-
-**Request:**
-```json
-{ "niche": "бухгалтерское обслуживание для малого бизнеса" }
-```
-
-**Response:**
-```json
-{
-  "ok": true,
-  "cached": true,
-  "ms": 2850,
-  "quality": {
-    "banality_score": 0,
-    "banned_words": []
-  },
-  "data": {
-    "niche": "Бухгалтерское обслуживание",
-    "target_segment": "Собственник малого бизнеса без штатного бухгалтера",
-    "core_problem": "Страх налоговых ошибок, не понимает что происходит с деньгами",
-    "desired_outcome": "Спокойствие: всё сдано, штрафов нет, отчёты понятны",
-
-    "utp_short": "Штрафов нет или вернём деньги",
-    "utp_long": "Берём полную ответственность за отчётность. Если налоговая начислит штраф по нашей вине — возмещаем его полностью. За 8 лет работы ни одного штрафа клиентам.",
-    "unique_mechanism": "Гарантия возврата денег при штрафе по нашей вине",
-    "offer": "2 месяца обслуживания бесплатно при переходе от другого бухгалтера",
-
-    "proof": [
-      { "type": "stat", "text": "340+ компаний на обслуживании" },
-      { "type": "guarantee", "text": "0 штрафов за 8 лет" },
-      { "type": "social", "text": "«Сплю спокойно впервые за 3 года» — Михаил К., ООО Торг" }
-    ],
-
-    "tone_of_voice": "Надёжный, спокойный, с конкретными цифрами",
-    "palette": [
-      { "role": "primary",    "hex": "#1B3A4B", "reason": "надёжность" },
-      { "role": "accent",     "hex": "#2E7D9B", "reason": "доверие" },
-      { "role": "highlight",  "hex": "#4CAF7D", "reason": "успех/деньги" },
-      { "role": "background", "hex": "#F7F9FA", "reason": "чистота" }
-    ],
-
-    "sections": [
-      {
-        "id": "hero",
-        "goal": "Зацепить болью + дать надежду",
-        "headline": "Налоговая штрафует — вас это не касается",
-        "subheadline": "Берём полную ответственность за вашу отчётность. Штраф по нашей вине — мы его платим.",
-        "bullets": [],
-        "cta": "Попробовать 2 месяца бесплатно",
-        "trust_elements": ["8 лет без штрафов", "340+ компаний"]
-      },
-      {
-        "id": "pain",
-        "goal": "Показать, что понимаем ситуацию",
-        "headline": "Узнаёте себя?",
-        "subheadline": "С этим к нам приходят чаще всего",
-        "bullets": [
-          "Бухгалтер пропал или уволился — отчётность висит",
-          "Налоговая прислала требование — паника",
-          "Не понимаю, почему уходит больше денег чем зарабатываю",
-          "Сдаю отчёты наугад и молюсь чтобы пронесло"
-        ],
-        "cta": "",
-        "trust_elements": []
-      },
-      {
-        "id": "mechanism",
-        "goal": "Объяснить как это работает",
-        "headline": "Как мы устроены — просто",
-        "subheadline": "",
-        "bullets": [
-          "Передаёте документы — мы всё делаем сами",
-          "Раз в месяц отчёт: что сдано, что заплачено, что впереди",
-          "Вопрос налоговой? Отвечаем вместо вас"
-        ],
-        "cta": "",
-        "trust_elements": []
-      },
-      {
-        "id": "proof",
-        "goal": "Доказать что работаем",
-        "headline": "Цифры которые можно проверить",
-        "subheadline": "",
-        "bullets": [],
-        "cta": "",
-        "trust_elements": ["340+ компаний", "8 лет на рынке", "0 штрафов по нашей вине", "НДС, УСН, патент — все режимы"]
-      },
-      {
-        "id": "objections",
-        "goal": "Снять главные возражения",
-        "headline": "Вы наверняка думаете…",
-        "subheadline": "",
-        "bullets": [
-          "«Это дорого» — от 4900 ₽/мес, дешевле штатного бухгалтера в 8 раз",
-          "«А вдруг не разберётесь в моей отрасли» — работаем с 40+ видами деятельности",
-          "«Передавать документы долго» — настроим передачу за 15 минут в день"
-        ],
-        "cta": "",
-        "trust_elements": []
-      },
-      {
-        "id": "offer",
-        "goal": "Сделать конкретное предложение",
-        "headline": "2 месяца бесплатно при переходе",
-        "subheadline": "Переходите от другого бухгалтера — первые 2 месяца за наш счёт. Риска ноль.",
-        "bullets": [],
-        "cta": "Забрать 2 месяца бесплатно",
-        "trust_elements": ["Договор до начала работы", "Выход в любой момент"]
-      },
-      {
-        "id": "faq",
-        "goal": "Закрыть оставшиеся страхи",
-        "headline": "Частые вопросы",
-        "subheadline": "",
-        "bullets": [],
-        "cta": "",
-        "trust_elements": []
-      },
-      {
-        "id": "cta",
-        "goal": "Финальный призыв к действию",
-        "headline": "Пришлите последний отчёт — скажем что не так",
-        "subheadline": "Бесплатный аудит вашей отчётности за 24 часа. Без обязательств.",
-        "bullets": [],
-        "cta": "Получить аудит бесплатно",
-        "trust_elements": ["Без обязательств", "Ответ за 24 часа"]
-      }
-    ]
-  }
-}
-```
-
----
-
-## Локальный запуск
+## Env
 
 ```bash
-npm install
-export ANTHROPIC_API_KEY=sk-ant-...
-node src/server.js         # http://localhost:3000
-node src/test.js "ниша"    # CLI
-```
-
-## Env на Vercel
-
-```
 ANTHROPIC_API_KEY=sk-ant-...
+ANTHROPIC_MAX_TOKENS=1200
 ANTHROPIC_TIMEOUT_MS=30000
-ANTHROPIC_MAX_TOKENS=700
 ANTHROPIC_RETRIES=0
+# DATA_DIR не нужен — Vercel пишет в /tmp/sites автоматически
 ```
 
-> Для `/api/site-blueprint` рекомендуется `ANTHROPIC_MAX_TOKENS=1200`
+## Тест локально
 
-## Структура
+```bash
+npm install && node src/server.js
 
+# 1. Создать сайты
+curl -X POST localhost:3000/api/site/generate -H "Content-Type: application/json" -d '{"niche":"юридические услуги"}'
+curl -X POST localhost:3000/api/site/generate -H "Content-Type: application/json" -d '{"niche":"ремонт квартир"}'
+curl -X POST localhost:3000/api/site/generate -H "Content-Type: application/json" -d '{"niche":"психолог онлайн"}'
+
+# 2. Список
+curl localhost:3000/api/sites
+
+# 3. Preview (замени SITE_ID)
+open http://localhost:3000/api/site/SITE_ID/preview
+
+# 4. Delete
+curl -X DELETE localhost:3000/api/site/SITE_ID
 ```
-api/
-  analyze.js          — POST /api/analyze (обратная совместимость)
-  site-blueprint.js   — POST /api/site-blueprint (новый)
-  health.js           — GET /api/health
-src/
-  prompts.js          — базы ниш + system prompts
-  analyze.js          — логика: нормализация + поиск + Claude
-  cache.js            — Redis/fallback (без изменений)
-  storage.js          — Postgres optional (без изменений)
-  server.js           — Express локальный (без изменений)
-index.html            — карточный UI
+
+## Деплой
+
+```bash
+git add src/store.js src/builder.js api/site/ api/sites.js dashboard.html vercel.json
+git commit -m "feat: site generation pipeline + IT dashboard"
+git push
 ```
+
+## Этап 3
+
+- Postgres/KV (persistent storage на Vercel)
+- Редактор блоков drag-and-drop
+- Публикация на поддоменах *.alladin.site
+- CRM: заявки с формы → dashboard

@@ -1,11 +1,14 @@
 {
   "rewrites": [
-    { "source": "/dashboard", "destination": "/dashboard.html" },
-    { "source": "/", "destination": "/index.html" }
+    { "source": "/dashboard",              "destination": "/dashboard.html" },
+    { "source": "/api/site/:siteId/preview",  "destination": "/api/site/[siteId].js" },
+    { "source": "/api/site/:siteId/blueprint","destination": "/api/site/[siteId].js" },
+    { "source": "/api/site/:siteId",          "destination": "/api/site/[siteId].js" },
+    { "source": "/",                       "destination": "/index.html" }
   ],
   "headers": [
     {
-      "source": "/(.*)",
+      "source": "/api/(.*)",
       "headers": [
         { "key": "Cache-Control", "value": "no-store" }
       ]
