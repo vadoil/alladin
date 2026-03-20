@@ -1,7 +1,8 @@
 {
-  "rewrites": [
-    { "source": "/analyze", "destination": "/api/analyze" },
-    { "source": "/analyze/batch", "destination": "/api/analyze-batch" },
-    { "source": "/health", "destination": "/api/health" }
+  "routes": [
+    { "src": "^/$", "dest": "/index.html" },
+    { "src": "^/analyze$", "dest": "/api/analyze" },
+    { "src": "^/analyze/batch$", "dest": "/api/analyze-batch" },
+    { "src": "^/health$", "dest": "/api/health" }
   ]
 }
