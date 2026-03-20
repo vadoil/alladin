@@ -72,6 +72,67 @@ async function runAnalyze(niche, requestId) {
   return { ...result, ms, requestId };
 }
 
+app.get("/", (_req, res) => {
+  res.type("html").send(`<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Alladin Niche Analyzer v1.1</title>
+  <style>
+    body { font-family: Inter, system-ui, Arial, sans-serif; margin: 24px; background: #f7f8fb; color: #1f2937; }
+    .card { max-width: 980px; background: #fff; border-radius: 12px; padding: 20px; box-shadow: 0 8px 30px rgba(0,0,0,.06); }
+    .row { display: flex; gap: 10px; }
+    input { flex: 1; padding: 12px; border: 1px solid #d1d5db; border-radius: 8px; }
+    button { padding: 12px 16px; border: 0; border-radius: 8px; background: #1f4ed8; color: #fff; cursor: pointer; }
+    pre { background: #0b1020; color: #d1e7ff; padding: 14px; border-radius: 10px; overflow: auto; }
+    .muted { color: #6b7280; font-size: 14px; margin-top: 8px; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>Alladin — Niche Analyzer (v1.1)</h2>
+    <p class="muted">Введи нишу и получи маркетинговый JSON-профиль.</p>
+    <div class="row">
+      <input id="niche" placeholder="Например: бизнес-консультации для малого бизнеса" />
+      <button id="run">Анализировать</button>
+    </div>
+    <p class="muted" id="meta"></p>
+    <pre id="out">Ожидание запроса…</pre>
+  </div>
+  <script>
+    const btn = document.getElementById('run');
+    const input = document.getElementById('niche');
+    const out = document.getElementById('out');
+    const meta = document.getElementById('meta');
+
+    async function run() {
+      const niche = input.value.trim();
+      if (!niche) return;
+      out.textContent = 'Запрос...';
+      meta.textContent = '';
+      try {
+        const r = await fetch('/analyze', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ niche })
+        });
+        const j = await r.json();
+        out.textContent = JSON.stringify(j, null, 2);
+        meta.textContent = 'status: ' + r.status + ' · requestId: ' + (j.requestId || '-') + ' · ' + (j.ms || 0) + 'ms';
+      } catch (e) {
+        out.textContent = 'Ошибка: ' + e.message;
+      }
+    }
+
+    btn.addEventListener('click', run);
+    input.addEventListener('keydown', (e) => { if (e.key === 'Enter') run(); });
+    input.value = 'бизнес-консультации';
+  </script>
+</body>
+</html>`);
+});
+
 app.get("/health", async (_req, res) => {
   await initStorage().catch(() => {});
   res.json({ status: "ok", service: "niche-analyzer", version: "v1.1" });
